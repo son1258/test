@@ -17,6 +17,21 @@ export default function Home() {
       }
       console.log("Message from iframe:", event.data);
     });
+
+    // Dynamically set --vh custom property to handle viewport height correctly
+    const setVh = () => {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    // Set initial --vh value and listen to window resize to update it
+    setVh();
+    window.addEventListener("resize", setVh);
+
+    // Cleanup the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("resize", setVh);
+    };
   }, []);
 
   return (
@@ -42,7 +57,7 @@ export default function Home() {
             top: 0;
             left: 0;
             width: 100%;
-            height: calc(var(--vh, 1vh) * 100);
+            height: calc(var(--vh, 1vh) * 100); /* Use --vh custom property */
             border: none;
           }
         `}</style>
